@@ -22,7 +22,7 @@ def registrationPage(request):
             #login(request, user)
 
             # redirect user to home page
-            return redirect('zumi_creation')
+            return redirect('zumi-creation')
     else:
         form = SignUpForm()
     return render(request, 'ekozumi_app/register.html', {'form': form})
@@ -32,3 +32,6 @@ def homePage(request):
 
 def zumiCreationPage(request):
     return render(request, "ekozumi_app/zumi_creation.html")
+
+def puzzlePage(request):
+    return render(request, "ekozumi_app/puzzle.html")

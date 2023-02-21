@@ -1,22 +1,24 @@
 {% load static %}
 <html>
     <head>
-        <link rel="stylesheet" href="{% static 'ekozumi_app/Ekozumi_Stylesheet.css' %}">
+        <link rel="stylesheet" href="{% static 'ekozumi_app/SusStylesheet.css' %}">
     </head>
     <body>
+        <div class="container">
             <div class="top">
-                <h1>EKOZUMI </h1>
+                <h1 id="title" class="hidden"><span id="logo" class="animated fadeInDown">EKOZUMI</h1>
             </div>
-            <div class="box">
+            <div class="login-box animated fadeInUp">
                 <div class="box-header">
                     <h2>Sign up</h2>
                 </div>
-                <form name="regForm" method="post">
+                <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <br>
                     <button type="submit">Register</button>
                 </form>
+                
             </div>
+        </div>
     </body>
 </html>
