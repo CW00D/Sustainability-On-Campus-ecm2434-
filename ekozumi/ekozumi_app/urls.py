@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
-# Currently 127.0.0.1:8000/ekozumi/ will go to the login page
+# Url patterns for the ekozumi application
 urlpatterns = [
     path("register/", views.registrationPage, name="ekozumi-register"),
     path("", auth_views.LoginView.as_view(template_name='ekozumi_app/login.html'), name="login"),

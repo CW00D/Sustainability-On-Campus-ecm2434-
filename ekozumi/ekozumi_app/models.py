@@ -4,6 +4,9 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 class Pet(models.Model):
+    '''
+    Contains info about each User's pet
+    '''
     petID = models.IntegerField(primary_key=True)
     petName = models.CharField(max_length=50)
     lastFed = models.DateTimeField(max_length=100)
@@ -11,6 +14,11 @@ class Pet(models.Model):
         return self.petName
 
 class Profile(models.Model):
+    '''
+    Additional information for each user, one to one
+    relationship with each User model, auto created
+    upon registration
+    '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     petID = models.ForeignKey(Pet, null=True, on_delete=models.CASCADE)
@@ -27,6 +35,9 @@ class AdminUser(models.Model):
 
 @receiver(post_save, sender = User)
 def user_is_created(sender, instance, created, **kwargs):
+    '''
+    When a user is created, a profile is also created
+    '''
     if created:
         Profile.objects.create(user= instance)
     else:
