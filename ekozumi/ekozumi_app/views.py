@@ -1,37 +1,45 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm
+from .forms import SignUpForm, ZumiCreationForm
+from .models import Pet
+from django.contrib.auth import authenticate, login
  
 def registrationPage(request):
-    '''
-    Contains the logic for when a user registers
-    '''
-    # True when a user creates an account
     if request.method == 'POST':
-        # Applies the post request to our sign up form
         form = SignUpForm(request.POST)
-        # Inbuilt validity checking, matching passwords etc.
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()  
 
             # load the profile instance created by the signal
             user.save()
+            raw_password = form.cleaned_data.get('password1')
 
             # login user after signing up
-            #user = authenticate(username=user.username, password=raw_password)
-            #login(request, user)
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
 
-            # redirect user to home page
-            return redirect('zumi-creation')
+            # redirect user to zumi creation page
+            return redirect('zumi_creation')
     else:
         form = SignUpForm()
     return render(request, 'ekozumi_app/register.html', {'form': form})
 
 def homePage(request):
-    return render(request, "ekozumi_app/test_home.html")
+    return render(request, "ekozumi_app/home.html")
 
 def zumiCreationPage(request):
-    return render(request, "ekozumi_app/zumi_creation.html")
+    if request.method == 'POST':
+        form = ZumiCreationForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            pet = Pet(petName = cleaned_data['petName'], petType = cleaned_data['petType'],)
+            pet.save()
 
-def puzzlePage(request):
-    return render(request, "ekozumi_app/puzzle.html")
+            current_user = request.user
+            print(current_user.pk)
+            current_user.profile.petID=pet
+            current_user.save()
+            return redirect('home_page')
+    else:
+        form = ZumiCreationForm()
+    return render(request, "ekozumi_app/zumi_creation.html", {'form':form})

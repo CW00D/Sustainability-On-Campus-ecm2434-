@@ -164,3 +164,12 @@ body {
 #puzzle-notice {
     font-size: 150%;
 }
+
+.carousel-control.left, .carousel-control.right {
+	background-image:none !important;
+	filter:none !important;
+}
+
+.carousel-inner img {
+	margin: auto;
+}
