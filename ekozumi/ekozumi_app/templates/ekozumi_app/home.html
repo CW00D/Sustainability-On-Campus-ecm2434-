@@ -20,12 +20,11 @@
         <div class="box-header">
             <h2>{{user}}'s Zumi</h2>
         </div>
-        <img id="character" src="{% static 'Images/hedge-hog-normal.png' %}" alt="character image">      
+        <img id="character" src="{%static image_source%}" alt="character image">      
     </div>
 
     <div id="footer"> 
       <div class="navbar">
-        <button class="btn" id="btn"><i class="fa fa-home"></i></button>
         <button class="btn" id="btn" onclick="location.href='../puzzle'"><i class="fa fa-puzzle-piece"></i></button>
         <button class="btn" id="btn" onclick="location.href='../map'"><i class="fa fa-street-view"></i></button>
         <button class="btn" id="btn"><i class="fa fa-trophy"></i></button>
