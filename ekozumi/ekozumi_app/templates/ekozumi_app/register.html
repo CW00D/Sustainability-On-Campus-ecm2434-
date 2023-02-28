@@ -1,9 +1,3 @@
-<!-- 
-Registration page, to register users will require username, email,
-password, and password confirmation 
-
-Authors: Elliot Wride, Lucas Enefer, Chrstian Wood, Oscar Klemenz
--->
 {% load static %}
 <html>
     <head>
@@ -22,7 +16,6 @@ Authors: Elliot Wride, Lucas Enefer, Chrstian Wood, Oscar Klemenz
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Sign Up</button>
-                <a href="{% url 'login' %}"><p class="small">Log in now!</p></a>
             </form>
         </div>
     </body>
