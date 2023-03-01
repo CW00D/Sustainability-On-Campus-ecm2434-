@@ -14,11 +14,13 @@ const music = new Audio("../../static/Sounds/background-tune.mp3")
 
 var seconds = 60;
 
+// displayes countdown/checks if time is up
 function startTimer() {
   var countdown = setInterval(function() {
     seconds--;
     document.getElementById("seconds").textContent = pad(seconds);
     if (seconds == 0) {
+      //game lost
       clearInterval(countdown);
       alert("LOST GAME, Click 'ok' to return home");
       window.location = "../home"
@@ -26,21 +28,22 @@ function startTimer() {
   }, 1000);
 }
 
+// adds a '0' to single digits ('2' -> '02')
 function pad(num) {
   return ("0" + num).slice(-2);
 }
+
 //game code
 function run(){
-    //music 
     //gets the index of a random hole 
     const i = Math.floor(Math.random() * holes.length)
     const hole = holes[i]
     const img = document.createElement('img')
-    //adds the image of 'mole' to the 
+    //adds the image of 'mole' to the hole
     img.classList.add('mole')
-    // make variable
     img.src = moleImage
-
+    
+  //when player hits the 'mole'
     img.addEventListener('click', () => {
         health -= 10
         whack.play()
@@ -53,17 +56,19 @@ function run(){
                 run()
             }, 500)
         }else{
+            //game won
             hole.removeChild(img)
             alert("YOU HAVE DEFEATED THE BOSS! Click 'ok' to progress");
             window.location = "../fight_outro";
         }
     })
-
+    // adds 'mole' to hole
     hole.appendChild(img)
 
     timer = setTimeout(() => {
         hole.removeChild(img)
         run()
+      //time that the 'mole' stays in the hole
     }, 800)
 }
 
@@ -72,6 +77,7 @@ window.addEventListener('mousemove', e =>{
     cursor.style.left = e.pageX + 'px'
 })
 
+//animates the hammer moving on click
 window.addEventListener('mousedown', () => {
     cursor.classList.add('active')
 })
