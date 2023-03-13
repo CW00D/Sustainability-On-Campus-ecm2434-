@@ -27,6 +27,7 @@ BADDIE_IMAGES = {"Ciggy":["Images/ciggy-normal.png", "Images/ciggy-angry.png"], 
 defaultMonster = Monster(monsterName="placeholder", monsterImage="Images/ciggy-normal.png", monsterAngryImage="Images/ciggy-angry.png", monsterIntroDialogue="Enemy Placeholder",
                          playerIntroDialogue="Player placeholder", monsterOutroDialogue="Enemy Placeholder", playerOutroDialogue="Player placeholder")
 # Default location is used if a game keeper has not created a location for a given day
+# Default location is used if a game keeper has not created a location for a given day
 defaultLocation = Location(locationName="Innovation", minLatitude=50, maxLatitude=55, minLongitude=40, maxLongitude=45, locationHint="Get Innovative", anagramWord="Forestry")
 
 def registrationPage(request):
@@ -110,7 +111,7 @@ def puzzlePage(request):
     '''
     try:
         hint, anagramWord= Location.objects.values("locationHint", "anagramWord").get(dayOfAppearance = datetime.now().date())
-    # If it doesn't exist uses a placeholder
+     # If it doesn't exist uses a placeholder
     except Location.DoesNotExist:
         hint = defaultLocation.locationHint
         anagramWord = defaultLocation.anagramWord
@@ -126,7 +127,7 @@ def mapPage(request):
     zumi_type = current_zumi.petType
     try:
         location = Location.objects.get(dayOfAppearance = datetime.now().date())
-    # If it doesn't exist uses a placeholder
+        # If it doesn't exist uses a placeholder
     except Location.DoesNotExist:
         location = defaultLocation
     #if its been more than 48 hours since last fed

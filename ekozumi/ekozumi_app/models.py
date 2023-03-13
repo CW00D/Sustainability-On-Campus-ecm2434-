@@ -7,7 +7,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-import django.utils.timezone
+import django.utils.timezone 
 
 # Possible choices for a users pet
 HEDGEHOG = "Hedgehog"
@@ -62,21 +62,21 @@ class Monster(models.Model):
         return self.monsterName
 
 class Location(models.Model):
-    '''
-    Contains info about each location
-    '''
-    locationID = models.AutoField(primary_key=True)
-    locationName = models.CharField(max_length=50)
-    dayOfAppearance = models.DateField(unique=True)
-    minLongitude = models.FloatField()
-    maxLongitude = models.FloatField()
-    minLatitude = models.FloatField()
-    maxLatitude = models.FloatField()
-    locationHint = models.CharField(max_length=500)
-    anagramWord = models.CharField(max_length=500)
+     '''
+     Contains info about each location
+     '''
+     locationID = models.AutoField(primary_key=True)
+     locationName = models.CharField(max_length=50)
+     dayOfAppearance = models.DateField(unique=True)
+     minLongitude = models.FloatField()
+     maxLongitude = models.FloatField()
+     minLatitude = models.FloatField()
+     maxLatitude = models.FloatField()
+     locationHint = models.CharField(max_length=500)
+     anagramWord = models.CharField(max_length=500)
 
-    def __str__(self):
-        return self.locationName
+     def __str__(self):
+         return self.locationName
 
 class AdminUser(models.Model):
     '''

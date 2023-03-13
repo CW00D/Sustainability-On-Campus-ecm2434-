@@ -4,7 +4,8 @@
  */
 
 var anagram;
-function startTime(){
+function startTime()
+{
     var today=new Date();
     var h=today.getHours();
     var m=today.getMinutes();
@@ -39,7 +40,8 @@ function puzzle(){
     startTime();
 }
 
-function checkTime(i){
+function checkTime(i) 
+{
     //formats single digits
     if (i<10)
         {
@@ -50,6 +52,7 @@ function checkTime(i){
 
 function checkSolve(){
     answer = (document.f1.nw.value).toUpperCase(); //to ignore case of letters
+
     if (answer == anagram.toUpperCase()){
         alert("You did it!")
         document.getElementById('hint').innerHTML=hint;
