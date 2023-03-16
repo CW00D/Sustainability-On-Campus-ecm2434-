@@ -6,20 +6,26 @@ Authors: Christian Wood, Oscar Klemenz
 """
 
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, ZumiCreationForm
-from .models import Pet, Monster, Location, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-import django.utils.timezone
+from django.core.mail import send_mail
 from datetime import datetime
+import django.utils.timezone
+from .forms import SignUpForm, ZumiCreationForm
+from .models import Pet, Monster, Location, Profile
 
 ZUMI_IMAGES = {"Hedgehog":["Images/hedge-hog-happy.png", "Images/hedge-hog-normal.png",
-                           "Images/hedge-hog-sad.png"], "Badger":["Images/hedge-hog-happy.png",
-                            "Images/hedge-hog-normal.png", "Images/hedge-hog-sad.png"], "Frog":["Images/frog-happy.png",
-                            "Images/frog-normal.png", "Images/frog-sad.png"], "Bat":["Images/bat-happy.png",
-                            "Images/bat-normal.png", "Images/bat-sad.png"], "Weasel":["Images/weasel-happy.png",
-                            "Images/weasel-normal.png", "Images/weasel-sad.png"], "Rabbit":["Images/rabbit-happy.png",
+                           "Images/hedge-hog-sad.png"], 
+                "Badger":["Images/hedge-hog-happy.png",
+                            "Images/hedge-hog-normal.png", "Images/hedge-hog-sad.png"], 
+                "Frog":["Images/frog-happy.png",
+                            "Images/frog-normal.png", "Images/frog-sad.png"], 
+                "Bat":["Images/bat-happy.png",
+                            "Images/bat-normal.png", "Images/bat-sad.png"], 
+                "Weasel":["Images/weasel-happy.png",
+                            "Images/weasel-normal.png", "Images/weasel-sad.png"], 
+                "Rabbit":["Images/rabbit-happy.png",
                             "Images/rabbit-normal.png", "Images/rabbit-sad.png"]}
 BADDIE_IMAGES = {"Ciggy":["Images/ciggy-normal.png", "Images/ciggy-angry.png"], "Pipe":["Images/pipe-normal.png",
                         "Images/pipe-angry.png"]}
@@ -57,6 +63,13 @@ def registrationPage(request):
             # load the profile instance created by the signal
             user.save()
             raw_password = form.cleaned_data.get('password1')
+
+            #send welcome email
+            subject = 'Welcome to Ekozumi!'
+            message = 'Your account has been registered with Ekozumi, have fun exploring!'
+            from_email = 'ekozumiap@gmail.com'
+            recipient_list = [user.email]
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
             # login user after signing up
             user = authenticate(username=user.username, password=raw_password)
