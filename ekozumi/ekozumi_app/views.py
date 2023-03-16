@@ -6,26 +6,21 @@ Authors: Christian Wood, Oscar Klemenz
 """
 
 from django.shortcuts import render, redirect
+from .forms import SignUpForm, ZumiCreationForm
+from .models import Pet, Monster, Location, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.mail import send_mail
-from datetime import datetime
 import django.utils.timezone
-from .forms import SignUpForm, ZumiCreationForm
-from .models import Pet, Monster, Location, Profile
+from datetime import datetime
 
 ZUMI_IMAGES = {"Hedgehog":["Images/hedge-hog-happy.png", "Images/hedge-hog-normal.png",
-                           "Images/hedge-hog-sad.png"], 
-                "Badger":["Images/hedge-hog-happy.png",
-                            "Images/hedge-hog-normal.png", "Images/hedge-hog-sad.png"], 
-                "Frog":["Images/frog-happy.png",
-                            "Images/frog-normal.png", "Images/frog-sad.png"], 
-                "Bat":["Images/bat-happy.png",
-                            "Images/bat-normal.png", "Images/bat-sad.png"], 
-                "Weasel":["Images/weasel-happy.png",
-                            "Images/weasel-normal.png", "Images/weasel-sad.png"], 
-                "Rabbit":["Images/rabbit-happy.png",
+                           "Images/hedge-hog-sad.png"], "Badger":["Images/hedge-hog-happy.png",
+                            "Images/hedge-hog-normal.png", "Images/hedge-hog-sad.png"], "Frog":["Images/frog-happy.png",
+                            "Images/frog-normal.png", "Images/frog-sad.png"], "Bat":["Images/bat-happy.png",
+                            "Images/bat-normal.png", "Images/bat-sad.png"], "Weasel":["Images/weasel-happy.png",
+                            "Images/weasel-normal.png", "Images/weasel-sad.png"], "Rabbit":["Images/rabbit-happy.png",
                             "Images/rabbit-normal.png", "Images/rabbit-sad.png"]}
 BADDIE_IMAGES = {"Ciggy":["Images/ciggy-normal.png", "Images/ciggy-angry.png"], "Pipe":["Images/pipe-normal.png",
                         "Images/pipe-angry.png"]}
@@ -196,7 +191,12 @@ def mapPage(request):
     #if its been under 24 hours since last fed
     else:
         zumi_image = ZUMI_IMAGES[zumi_type][0]
-    return render(request, "ekozumi_app/map.html", {'image_source':zumi_image, 'location':location})
+    # Checks if battle has been completed today
+    notFedToday = True
+    if(current_zumi.lastFed.date() == django.utils.timezone.now().date()):
+        notFedToday = False
+    print(notFedToday)
+    return render(request, "ekozumi_app/map.html", {'image_source':zumi_image, 'location':location, 'notFedToday':notFedToday})
 
 @login_required()
 def fightIntroPage(request):
@@ -272,7 +272,7 @@ def fightPage(request):
     """
     # Checks user has come from the fight intro page
     previous_url = request.META.get('HTTP_REFERER')
-    if( previous_url == "http://127.0.0.1:8000/ekozumi/fight_intro/"):
+    if( previous_url == "http://127.0.0.1:8000/ekozumi/fight_intro/" or previous_url ==  "http://127.0.0.1:8000/ekozumi/lose/"):
         # Gets todays monster
         try:
             monster = Monster.objects.get(dayOfAppearance = datetime.now().date())
@@ -321,3 +321,15 @@ def leaderboardPage(request):
     """
     topscorers = Profile.objects.exclude(petID__isnull=True).order_by('-score')[0:10]
     return render(request, "ekozumi_app/leaderboard.html", {"topscorers":topscorers})
+
+@login_required()
+def losePage(request):
+    '''
+        todo: redirect users on whack a mole if they lose to lose page
+              - check previous url situation as fight itself needs to be accessible from lose page 
+    '''
+    previous_url = request.META.get('HTTP_REFERER')
+    if( previous_url == "http://127.0.0.1:8000/ekozumi/fight/"):
+        return render(request, "ekozumi_app/youLose.html")
+    else:
+        return redirect('home_page')
