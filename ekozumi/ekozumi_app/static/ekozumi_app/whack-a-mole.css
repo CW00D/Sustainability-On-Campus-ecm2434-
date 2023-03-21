@@ -4,7 +4,11 @@
 
 *{
     margin: 0;
-    padding: 0;
+    padding-top: 0;
+}
+
+html {
+    padding-bottom: 10%;
 }
 
 html, body{
